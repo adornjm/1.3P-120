@@ -9,6 +9,7 @@
         * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         /* Set a background color for the body */
@@ -55,6 +56,7 @@
             background-color: #fff;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
+            margin: 20px;
         }
 
         /* Style the footer */
@@ -64,188 +66,141 @@
             background-color: #007bff;
             color: white;
         }
-
-        /* Style the input fields and buttons */
-        input[type="text"],
-        input[type="submit"] {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        /* Style the submit buttons with a hover effect */
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* Style the individual sections (About, Portfolio, Skills, Contact) */
-        h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        /* Style the text in each section */
-        p {
-            line-height: 1.5;
-        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>ADORN</h1>
-        <p>Web Developer | Creative Designer</p>
-    </header>
+    <div id="app">
+        <header>
+            <h1>ADORN</h1>
+            <p>Web Developer | Creative Designer</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><router-link to="/about">About</router-link></li>
+                <li><router-link to="/portfolio">Portfolio</router-link></li>
+                <li><router-link to="/skills">Skills</router-link></li>
+                <li><router-link to="/contact">Contact</router-link></li>
+            </ul>
+        </nav>
+        
+        <router-view></router-view>
+        
+        <footer>
+            <p>&copy; 2023 Your Name</p>
+        </footer>
+    </div>
 
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <!-- Vue.js and Vue Router scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.5.2/dist/vue-router.js"></script>
 
-    <main id="content">
-        <!-- Content from other HTML files will be loaded here -->
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Adorn</p>
-    </footer>
-
+    <!-- Vue About component -->
     <script>
-        // Function to load content from a given HTML file into the main element
-        function loadContent(page) {
-            fetch(page)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error loading page:', error);
-                });
-        }
+        const About = {
+            template: `
+                <div>
+                    <h2>About Me</h2>
+                    <p>Welcome to my online portfolio! I'm Adorn Jose, a creative web developer and designer who is passionate about building stunning and useful websites.</p>
+                    <p>I'm committed to producing user-friendly, high-quality websites that are tailored specifically to my tasks.</p>
+                    <p>I have expertise in front-end programming using HTML, CSS, and JavaScript in addition to Vue.js, which I use to create dynamic and interactive online applications.</p>
+                    <p>Thank you for visiting my portfolio. Feel free to explore my work and don't hesitate to reach out for collaboration or inquiries.</p>
+                </div>
+            `,
+        };
+    </script>
 
-        // Add event listeners to navigation links to load content when clicked
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('nav a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const targetPage = event.target.getAttribute('href');
-                    loadContent(targetPage);
-                });
-            });
+    <!-- Vue Portfolio component -->
+    <script>
+        const Portfolio = {
+            template: `
+                <div>
+                    <h2>Portfolio</h2>
+                    <p>Check out some of my recent projects details:</p>
+                    <ul>
+                        <li>Project 1: In my first project, involved creating a responsive website for a local donut business.</li>
+                        <li>Project 2: I designed and developed a custom website for a Responsive Design Example.</li>
+                        <li>Project 3: I worked on a Todo App which create day to day task and Conditional Rendering and Form Input Handling.</li>
+                    </ul>
+                </div>
+            `,
+        };
+    </script>
+
+    <!-- Vue Contact component -->
+    <script>
+        const Contact = {
+            template: `
+                <div>
+                    <h2>Contact Me</h2>
+                    <p>I am open for collaborative work. Please do not hesitate to contact me!</p>
+                    <form @submit.prevent="submitForm">
+                        <div>
+                            <label for="name">Name:</label>
+                            <input
+                                type="text"
+                                id="name"
+                                v-model="name"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label for="email">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                v-model="email"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label for="message">Message:</label>
+                            <textarea
+                                id="message"
+                                v-model="message"
+                                required
+                            ></textarea>
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <p v-if="messageSent">Message sent successfully!</p>
+                </div>
+            `,
+            data() {
+                return {
+                    name: "",
+                    email: "",
+                    message: "",
+                    messageSent: false,
+                };
+            },
+            methods: {
+                submitForm() {
+                    // Handle form submission here (you can implement the logic to send messages)
+                    // For this example, we'll just show a success message
+                    this.messageSent = true;
+                },
+            },
+        };
+    </script>
+
+    <!-- Vue Router setup -->
+    <script>
+        const routes = [
+            { path: '/about', component: About },
+            { path: '/portfolio', component: Portfolio },
+            { path: '/skills', component: { template: '<div><h2>Skills</h2><p>Here are some of the skills I possess:</p><ul><li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>Vue.js</li><li>Responsive Web Design</li></ul></div>' } },
+            { path: '/contact', component: Contact },
+        ];
+
+        const router = new VueRouter({
+            routes
         });
 
-        // Load the initial page (e.g., 'about.html') when the website loads
-        document.addEventListener('DOMContentLoaded', () => {
-            loadContent('about.html');
-        });
-
-        // User input handling for the Skills section
-        document.addEventListener('DOMContentLoaded', () => {
-            const skillsInput = document.getElementById('skillsInput');
-            const skillsSubmitButton = document.getElementById('skillsSubmitButton');
-            const skillsMessage = document.getElementById('skillsMessage');
-
-            skillsSubmitButton.addEventListener('click', () => {
-                const skills = skillsInput.value.trim();
-                if (skills) {
-                    skillsMessage.textContent = `Skills: ${skills}`;
-                    skillsInput.value = ''; // Clear the input field
-                }
-            });
-        });
-
-        // User input handling for the About Myself section
-        document.addEventListener('DOMContentLoaded', () => {
-            const aboutInput = document.getElementById('aboutInput');
-            const aboutSubmitButton = document.getElementById('aboutSubmitButton');
-            const aboutMessage = document.getElementById('aboutMessage');
-
-            aboutSubmitButton.addEventListener('click', () => {
-                const aboutText = aboutInput.value.trim();
-                if (aboutText) {
-                    aboutMessage.textContent = aboutText;
-                    aboutInput.value = ''; // Clear the input field
-                }
-            });
-        });
-
-        // User input handling for the Portfolio section
-        document.addEventListener('DOMContentLoaded', () => {
-            const portfolioInput = document.getElementById('portfolioInput');
-            const portfolioSubmitButton = document.getElementById('portfolioSubmitButton');
-            const portfolioMessage = document.getElementById('portfolioMessage');
-
-            portfolioSubmitButton.addEventListener('click', () => {
-                const portfolioText = portfolioInput.value.trim();
-                if (portfolioText) {
-                    portfolioMessage.textContent = portfolioText;
-                    portfolioInput.value = ''; // Clear the input field
-                }
-            });
+        new Vue({
+            el: '#app',
+            router
         });
     </script>
 </body>
 </html>
-
-<!-- about.html -->
-<h2>About Myself</h2>
-<div>
-    <img src="profile.png" alt="Adorn">
-    <p id="aboutMessage">Hello, I'm Adorn Jose, an enthusiastic IT student studying in Melbourne. I'm currently in my first year pursuing a Bachelor's degree in Information Technology. During my leisure time, I like to watch movies and explore the fundamentals of coding. I'm constantly excited about acquiring fresh knowledge related to emerging technologies and software tools.</p>
-    <input type="text" id="aboutInput" placeholder="Update About Myself">
-    <button id="aboutSubmitButton">Submit</button>
-</div>
-
-<!-- portfolio.html -->
-<h2>Portfolio</h2>
-<div>
-    <div>
-        <h3>Project 1: Task 1.1P - Creating a website for donutshop</h3>
-        <p>"The skill used in this HTML code and added CSS style in this website."</p>
-    </div>
-    <div>
-        <h3>Project 2: Task 1.2P - Created a website for Responsive Web Design</h3>
-        <p>"The skill used in this HTML code and added CSS style and javascript also added in this website."</p>
-    </div>
-    <p id="portfolioMessage"></p>
-    <input type="text" id="portfolioInput" placeholder="Update Portfolio">
-    <button id="portfolioSubmitButton">Submit</button>
-</div>
-
-<!-- skills.html -->
-<h2>Skills</h2>
-<div>
-    <ul>
-        <li>Front-End Development</li>
-        <li>Responsive Web Design</li>
-        <li>Web Development Frameworks</li>
-        <li>Problem-Solving</li>
-    </ul>
-    <p id="skillsMessage"></p>
-    <input type="text" id="skillsInput" placeholder="Update Skills">
-    <button id="skillsSubmitButton">Submit</button>
-</div>
-
-<!-- contact.html -->
-<h2>Contact Me</h2>
-<div>
-    <p>I am open for collaborative work. Please do not hesitate to contact me!</p>
-    <input type="text" id="userInput" placeholder="Your Message">
-    
-    <p id="userTypedMessage">No message entered.</p>
-    
-    <button id="submitMessage">Submit</button>
-    <p id="messageSent">Message sent successfully!</p>
-    
-    <ul>
-        <li>Email: <a href="mailto:adorn@gmail.com">adornjm@gmail.com</a></li>
-        <li>Phone Number: <a href="tel:+61470288925">+61 470288925</a></li>
-    </ul>
-</div>
